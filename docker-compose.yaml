@@ -8,5 +8,11 @@ services:
     #    ports:
     #      - "5555:5555"
     container_name: customer_portal
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5555/" ]
+      interval: 15s
+      retries: 5
+      start_period: 30s
+      timeout: 15s
 
 # ...
