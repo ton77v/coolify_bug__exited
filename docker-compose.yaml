@@ -1,12 +1,18 @@
 services:
+  initializer:
+    container_name: initializer
+    image: alpine:latest
+    # noinspection ComposeUnknownKeys
+    exclude_from_hc: true  # Coolify-specific
+    restart: no
+    command: [ "sh", "-c", "echo READY && exit 0" ]
+
   customer_portal:
     build:
       context: .
       dockerfile: Dockerfile
     expose:
       - "0:5555"
-    #    ports:
-    #      - "5555:5555"
     container_name: customer_portal
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:5555/" ]
@@ -14,5 +20,8 @@ services:
       retries: 5
       start_period: 30s
       timeout: 15s
+    depends_on:
+      initializer:
+        condition: service_completed_successfully
 
 # ...
