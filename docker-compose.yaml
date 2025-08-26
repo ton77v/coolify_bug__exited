@@ -1,11 +1,11 @@
 services:
-  initializer:
-    container_name: initializer
-    image: alpine:latest
-    # noinspection ComposeUnknownKeys
-    exclude_from_hc: true  # Coolify-specific
-    restart: no
-    command: [ "sh", "-c", "echo READY && exit 0" ]
+#  initializer:
+#    container_name: initializer
+#    image: alpine:latest
+#    # noinspection ComposeUnknownKeys
+#    exclude_from_hc: true  # Coolify-specific
+#    restart: no
+#    command: [ "sh", "-c", "echo READY && exit 0" ]
 
   customer_portal:
     build:
