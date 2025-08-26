@@ -1,11 +1,31 @@
 services:
+  mailhog:
+    container_name: mailhog__portal
+    environment:
+      - MH_API_BIND_ADDR=0.0.0.0:999
+      - MH_UI_BIND_ADDR=0.0.0.0:999
+    healthcheck:
+      interval: 30s
+      retries: 3
+      test: [ "CMD", "nc", "-z", "localhost", "1025" ]
+      timeout: 5s
+    hostname: mailhog
+    image: anatomicjc/mailhog:latest
+    ports:
+      - "0:999"
+
   initializer:
     container_name: initializer
     image: alpine:latest
+    depends_on:
+      mailhog:
+        condition: service_healthy
+        required: true
     # noinspection ComposeUnknownKeys
     exclude_from_hc: true  # Coolify-specific
     restart: no
-    command: [ "sh", "-c", "echo zZz && sleep 55 && echo READY && exit 0" ]
+    # command: [ "sh", "-c", "echo zZz && sleep 55 && echo READY && exit 0" ]  # doesn't matter
+    command: [ "sh", "-c", "echo READY && exit 0" ]
 
   customer_portal:
     build:
