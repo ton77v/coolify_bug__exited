@@ -17,6 +17,7 @@ services:
   initializer:
     container_name: initializer
     image: alpine:latest
+    # the trick is this dependency: if we exit when there's a service running, it won't be counted as "app exited"
     depends_on:
       mailhog:
         condition: service_healthy
@@ -40,20 +41,20 @@ services:
       retries: 5
       start_period: 30s
       timeout: 15s
-#    depends_on:
-##      initializer:
-##        condition: service_completed_successfully
-##        required: true
-#      postgres:
-#        condition: service_healthy
-#        required: true
+    depends_on:
+      initializer:
+        condition: service_completed_successfully
+        required: true
+      postgres:
+        condition: service_healthy
+        required: true
 
   postgres:
     container_name: postgres
-#    depends_on:
-#      initializer:
-#        condition: service_completed_successfully
-#        required: true
+    depends_on:
+      initializer:
+        condition: service_completed_successfully
+        required: true
     environment:
       POSTGRES_DB: ${COMPOSE__POSTGRES_DB:-postgres}
       POSTGRES_PASSWORD: ${COMPOSE__POSTGRES_PASSWORD:-postgres}
