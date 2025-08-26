@@ -30,10 +30,10 @@ services:
 
   postgres:
     container_name: postgres
-    depends_on:
-      initializer:
-        condition: service_completed_successfully
-        required: true
+#    depends_on:
+#      initializer:
+#        condition: service_completed_successfully
+#        required: true
     environment:
       POSTGRES_DB: ${COMPOSE__POSTGRES_DB:-postgres}
       POSTGRES_PASSWORD: ${COMPOSE__POSTGRES_PASSWORD:-postgres}
