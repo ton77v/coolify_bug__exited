@@ -21,7 +21,38 @@ services:
       start_period: 30s
       timeout: 15s
     depends_on:
+#      initializer:
+#        condition: service_completed_successfully
+#        required: true
+      postgres:
+        condition: service_healthy
+        required: true
+
+  postgres:
+    container_name: postgres
+    depends_on:
       initializer:
         condition: service_completed_successfully
-
-# ...
+        required: true
+    environment:
+      POSTGRES_DB: ${COMPOSE__POSTGRES_DB:-postgres}
+      POSTGRES_PASSWORD: ${COMPOSE__POSTGRES_PASSWORD:-postgres}
+      POSTGRES_USER: ${COMPOSE__POSTGRES_USER:-postgres}
+    expose:
+      - '5432'
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${COMPOSE__POSTGRES_USER:?COMPOSE__POSTGRES_USER not set} -d ${COMPOSE__POSTGRES_DB:?COMPOSE__POSTGRES_DB not set}" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+    hostname: postgres
+    image: postgres:16.4
+    restart: always
+    volumes:
+      - type: bind
+        bind:
+          create_host_path: true
+        source: ${PG_DATA_PATH:-./pg_data}/data
+        target: /var/lib/postgresql/data
+        # noinspection ComposeUnknownKeys
+        is_directory: true  # Coolify-specific
