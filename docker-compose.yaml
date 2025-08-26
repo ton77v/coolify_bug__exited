@@ -20,13 +20,13 @@ services:
       retries: 5
       start_period: 30s
       timeout: 15s
-    depends_on:
-#      initializer:
-#        condition: service_completed_successfully
+#    depends_on:
+##      initializer:
+##        condition: service_completed_successfully
+##        required: true
+#      postgres:
+#        condition: service_healthy
 #        required: true
-      postgres:
-        condition: service_healthy
-        required: true
 
   postgres:
     container_name: postgres
