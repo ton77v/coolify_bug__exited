@@ -1,6 +1,6 @@
 services:
   mailhog:
-    container_name: mailhog__portal
+    container_name: mailhog__test_repo
     environment:
       - MH_API_BIND_ADDR=0.0.0.0:999
       - MH_UI_BIND_ADDR=0.0.0.0:999
