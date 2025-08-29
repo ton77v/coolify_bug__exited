@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
 #    expose:  # requires adding :5555 to the "Domains for Customer Portal"
 #      - "0:5555"
-    ports:
+    expose:
       - "5555"
     container_name: customer_portal
     healthcheck:
